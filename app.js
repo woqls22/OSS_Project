@@ -2,7 +2,7 @@ const express = require('express');
 const multer = require('multer');
 const ejs = require('ejs');
 const path = require('path');
-
+let  { PythonShell }  =  require ( 'python-shell' )
 //Set Storage Engine
 const storage = multer.diskStorage({
     destination : './public/uploads/',
@@ -43,6 +43,7 @@ app.use(express.static('./public'));
 app.get('/', function(req,res){
     res.render('index');
 });
+
 app.post('/upload',function(req,res){
     upload(req, res, function(err){
         if(err){
@@ -55,10 +56,30 @@ app.post('/upload',function(req,res){
                     msg: 'Error : No File Selected!'
                 });
             } else{
-                res.render('index',{
-                    msg: 'File Uploaded',
-                    file : 'uploads/'+req.file.filename
+                console.log(req.file.filename);
+                console.log(typeof(req.file.filename))
+                var options = {
+                    mode: 'text',
+                    pythonPath: '',
+                    pythonOptions: ['-u'],
+                    scriptPath: '',    // 실행할 py 파일 path. 현재 nodejs파일과 같은 경로에 있어 생략
+                    args: [req.file.filename]
+                };
+                PythonShell.run("scanner.py",options, function(err){
+                    if(err){
+                        res.render('index',{
+                            msg: 'Error : '+err
+                        });
+                    }
+                    else{
+                        console.log("complete")
+                        res.render('index',{
+                        msg: 'File Uploaded',
+                        file : 'uploads/'+req.file.filename
+                    });
+                    }
                 });
+
             }
         }
     });
