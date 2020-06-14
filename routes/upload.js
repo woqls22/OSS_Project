@@ -57,7 +57,8 @@ router.post('/',function(req,res){
                 PythonShell.run("scanner.py",options, function(err){
                     if(err){
                         res.render('index',{
-                            msg: 'Error : 조명의 변화가 심하거나, 윤곽선을 검출하기 어렵습니다.'
+                            msg: 'Error : 조명의 변화가 심하거나, 윤곽선을 검출하기 어렵습니다.',
+                            file : 'uploads/'+req.file.filename
                         });
                     }
                     else{

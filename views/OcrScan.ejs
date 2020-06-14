@@ -17,7 +17,10 @@
  <body>
   <div class="container">
     <h1>문서 텍스트 추출</h1>
-    <%=typeof msg != 'undefined' ? msg : ''%>
+    <%-typeof msg != 'undefined' ? msg.replace(/\r/g, '<br/>') : ''%>
+    <div id = "trans">
+          <button type = "button" class = "btn">한국어로 번역 [English >> Korean]</button> 
+    </div>
     <form action="/ocrscan" method="POST" enctype = "multipart/form-data">
       <div class="file-field input-field">
         <div class="btn grey">
@@ -28,10 +31,12 @@
           <input class="file-path validate" type="text">
         </div>
       </div>
+        
       <img src=" <%= typeof file != 'undefined' ? file : ''%>" class="responsive-img">
-      <button type="submit" class = "btn">Text Extract</button>
+      <div><button type="submit" class = "btn">Text Extract</button> 
+    </div>
       </form>
-      <br/><br/><br/>
+      <br/><br/>
       <div id="image_preview">
         <img src="#" id = "editImg" class = "cropper-hidden"/>
         <br />
@@ -58,6 +63,7 @@
             blobURL = window.URL.createObjectURL(file);
             $('#image_preview img').attr('src', blobURL);
             $('#image_preview').slideDown(); //업로드한 이미지 미리보기 
+            $('#trans').slideDown(); 
             $(this).slideUp(); //파일 양식 감춤
         }
     });
@@ -68,6 +74,7 @@
     $('#image_preview a').bind('click', function() {
         resetFormElement($('#image')); //전달한 양식 초기화
         $('#image').slideDown(); //파일 양식 보여줌
+        $('#trans').slideDown(); 
         $(this).parent().slideUp(); //미리 보기 영역 감춤
         return false; //기본 이벤트 막음
     });
@@ -85,6 +92,21 @@
         //DOM에서 제공하는 초기화 메서드 reset()을 호출
         e.unwrap(); //감싼 <form> 태그를 제거
     }
+    </script>
+    <script>
+      var TranslateBtn = document.getElementById("trans");
+      console.log("등록");
+      TranslateBtn.onclick = function() {
+          var form = document.createElement('form');
+          form.setAttribute('method', 'post');
+          form.setAttribute('action', "/translate");
+          document.charset="utf-8";
+          var hiddenField = document.createElement('input');
+          form.appendChild(hiddenField);
+          document.body.appendChild(form);
+          form.submit();
+          console.log("post완료");
+        }
     </script>
  </body>
 </html>
