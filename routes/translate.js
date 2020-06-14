@@ -6,8 +6,8 @@ var router = express.Router();
 let  { PythonShell }  =  require ( 'python-shell' )
 var fs = require('fs');
 const PAPAGO_URL = 'https://openapi.naver.com/v1/papago/n2mt'
-const PAPAGO_ID = 'UHlyRaypQ_X9LEDMw3p4'
-const PAPAGO_SECRET = 'jzDqgxaSnQ'
+const PAPAGO_ID = 'ID'
+const PAPAGO_SECRET = 'PW'
 const bodyParser = require('body-parser');
 router.use(bodyParser.json());
 var transMessage = "";
